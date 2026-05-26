@@ -14,8 +14,12 @@ public class PlayerController {
 
     @Autowired
     private PlayerRepository playerRepository;
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JWTServices jwtServices;
 
     @GetMapping("/players")
     public List<Players> getPlayers(){
@@ -60,11 +64,17 @@ public class PlayerController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Players loginData){
+    public ResponseEntity<?> login(@RequestBody Players loginData){
         return playerRepository.findByUsername(loginData.getUsername())
             .map(players -> {
                 if (passwordEncoder.matches(loginData.getPassword(),players.getPassword())){
-                    return ResponseEntity.ok("Login succesful! Welcome " + players.getUsername());
+                    String token = jwtServices.generateToken(loginData.getUsername());
+                    return ResponseEntity.ok(
+                            Map.of(
+                                 "token" , token,
+                                    "username" ,players.getUsername(),
+                                    "id" , players.getId()
+                            ));
                 }
                 return ResponseEntity.status(401).body("Wrong password");
 
