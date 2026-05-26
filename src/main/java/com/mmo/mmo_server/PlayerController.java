@@ -81,4 +81,9 @@ public class PlayerController {
             }).orElse(ResponseEntity.status(404).body("Player Not Found!!"));
     }
 
+    @GetMapping("/secure-test")
+    public ResponseEntity<String> secureTest() {
+        return ResponseEntity.ok("You are authenticated!");
+    }
+
 }
