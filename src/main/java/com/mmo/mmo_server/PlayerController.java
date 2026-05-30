@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,6 +85,25 @@ public class PlayerController {
     @GetMapping("/secure-test")
     public ResponseEntity<String> secureTest() {
         return ResponseEntity.ok("You are authenticated!");
+    }
+
+    @GetMapping("/game/state")
+    public ResponseEntity<?> getGameState() {
+        GameState gameState = GameState.getInstance();
+        List<Map<String, Object>> players = new ArrayList<>();
+        for (GamePlayer p : gameState.getAllPlayers().values()) {
+            players.add(Map.of(
+                    "username", p.username,
+                    "x", p.x,
+                    "y", p.y,
+                    "hp", p.hp,
+                    "action", p.action
+            ));
+        }
+        return ResponseEntity.ok(Map.of(
+                "players", players,
+                "weapons", gameState.weaponsOnGround.size()
+        ));
     }
 
 }
