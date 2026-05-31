@@ -1,5 +1,6 @@
 package com.mmo.mmo_server;
 
+import jdk.dynalink.linker.LinkerServices;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -8,6 +9,8 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -44,17 +47,19 @@ public class GameWebSocket extends TextWebSocketHandler {
                     int y = (int) (Math.random() * gameState.gridSize);
                     GamePlayer player = new GamePlayer(username, 0, x, y, session);
                     gameState.addPlayer(player);
+                    gameService.spawnWeapons();
                     session.sendMessage(new TextMessage("Joined at " + x + "," + y));
                 }
                 case "MOVE" -> {
-                    String username = (String) data.get("usename");
+                    String username = (String) data.get("username");
                     if (username == null) return;
                     int dx = ((Double) data.get("dx")).intValue();
                     int dy = ((Double) data.get("dy")).intValue();
                     gameService.movePlayer(username, dx, dy);
                 }
                 case "ATTACK" -> {
-                    String username = (String) data.get("usename");
+                    String username = (String) data.get("username");
+                    if (username == null) return;
                     int dx = ((Double) data.get("dx")).intValue();
                     int dy = ((Double) data.get("dy")).intValue();
                     gameService.attack(username, dx, dy);
@@ -70,10 +75,22 @@ public class GameWebSocket extends TextWebSocketHandler {
         }
     }
 
-
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status){
-        System.out.println("Player Disconnected: " + session.getId());
+
+        GamePlayer disconnected = null;
+        List<String> keys = new ArrayList<>(gameState.getAllPlayers().keySet());
+        for (int i = 0; i < gameState.getAllPlayers().size(); i++) {
+            GamePlayer player = gameState.getAllPlayers().get(keys.get(i));
+            if (player != null && player.session.getId().equals(session.getId())){
+                disconnected = player;
+                break;
+            }
+        }
+        if (disconnected != null) {
+            gameState.removePlayer(disconnected.username);
+            System.out.println("Player Disconnected: " + session.getId());
+        }
     }
 
 }

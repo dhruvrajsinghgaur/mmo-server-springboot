@@ -129,6 +129,9 @@ public class GameService {
     }
 
     public String checkWinner(){
+
+        if (gameState.phase != GamePhase.PLAYING) return null;
+
         List<GamePlayer> alivePlayers = new ArrayList<>();
         List<String> keys = new ArrayList<>(gameState.getAllPlayers().keySet());
 
@@ -137,12 +140,14 @@ public class GameService {
             if (player.isAlive()) alivePlayers.add(player);
         }
         if (alivePlayers.size() == 1) {
-            gameState.gameRunning = false;
+            gameState.phase = GamePhase.ENDED;
+            gameState.reset();
             return alivePlayers.get(0).username;
         }
 
         if (alivePlayers.size() == 0) {
-            gameState.gameRunning = false;
+            gameState.phase = GamePhase.ENDED;
+            gameState.reset();
             return "DRAW";
         }
         return null;

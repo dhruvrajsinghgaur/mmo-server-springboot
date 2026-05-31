@@ -8,15 +8,16 @@ public class GameState {
 
     private static GameState instance;
 
+    public GamePhase phase = GamePhase.WAITING;
+    public int playersNeededToStart = 2;
+
     ConcurrentHashMap<String, GamePlayer> players;
     List<Weapon> weaponsOnGround;
-    boolean gameRunning;
     int gridSize = 100;
 
     public GameState(){
         players = new ConcurrentHashMap<>();
         weaponsOnGround = new ArrayList<>();
-        gameRunning = false;
     }
 
     public static GameState getInstance(){
@@ -26,6 +27,7 @@ public class GameState {
 
     public void addPlayer(GamePlayer player){
         players.put(player.username, player);
+        if (players.size() >= playersNeededToStart) phase = GamePhase.PLAYING;
     }
 
     public void removePlayer(GamePlayer player){
@@ -52,5 +54,10 @@ public class GameState {
         weaponsOnGround.remove(weapon);
     }
 
+    public void reset(){
+        players.clear();
+        weaponsOnGround.clear();
+        phase = GamePhase.WAITING;
+    }
 
 }
