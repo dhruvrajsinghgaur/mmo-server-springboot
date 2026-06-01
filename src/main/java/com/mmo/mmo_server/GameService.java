@@ -1,9 +1,12 @@
 package com.mmo.mmo_server;
 
+import com.google.gson.Gson;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.TextMessage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 @Service
@@ -11,6 +14,8 @@ public class GameService {
 
     private final PlayerRepository playerRepository;
     private GameState gameState = GameState.getInstance();
+
+    private final Gson gson = new Gson();
 
     public GameService(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
@@ -36,15 +41,28 @@ public class GameService {
         checkWeaponPickup(player);
     }
 
-    public void checkWeaponPickup(GamePlayer player){
+    public void checkWeaponPickup(GamePlayer player) {
         for (int i = 0; i < gameState.weaponsOnGround.size(); i++) {
             Weapon weapon = gameState.weaponsOnGround.get(i);
             if (player.x == weapon.worldX && player.y == weapon.worldY) {
                 player.inventory.add(weapon);
-                if (player.equippedWeapon == null){
+                if (player.equippedWeapon == null) {
                     player.equippedWeapon = weapon;
                 }
                 gameState.removeWeapon(weapon);
+
+                // notify player via their session
+                try {
+                    String msg = gson.toJson(Map.of(
+                            "type", "PICKUP",
+                            "weapon", weapon.name,
+                            "atk", weapon.attackPower,
+                            "range", weapon.range
+                    ));
+                    player.session.sendMessage(new TextMessage(msg));
+                } catch (Exception e) {
+                    System.out.println("Failed to send pickup message");
+                }
                 break;
             }
         }
@@ -141,7 +159,6 @@ public class GameService {
         }
         if (alivePlayers.size() == 1) {
             gameState.phase = GamePhase.ENDED;
-            gameState.reset();
             return alivePlayers.get(0).username;
         }
 

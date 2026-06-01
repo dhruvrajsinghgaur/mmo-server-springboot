@@ -42,7 +42,7 @@ public class GameLoop {
         String winner = gameService.checkWinner();
         if (winner != null) {
             System.out.println("Game over!! Winner is " + winner);
-            for (int i = 0; i < gameState.getAllPlayers().size(); i++) {
+            for (int i = 0; i < keys.size(); i++) {
                 String winMessage = gson.toJson(Map.of("type", "WINNER", "winner", winner));
                 GamePlayer player = gameState.getAllPlayers().get(keys.get(i));
                 try{
@@ -75,9 +75,20 @@ public class GameLoop {
             playerList.add(playerData);
         }
 
+        List<Map<String, Object>> weaponList = new ArrayList<>();
+        for (int i = 0; i < gameState.weaponsOnGround.size(); i++) {
+            Weapon w = gameState.weaponsOnGround.get(i);
+            Map<String, Object> weaponData = new HashMap<>();
+            weaponData.put("x", w.worldX);
+            weaponData.put("y", w.worldY);
+            weaponData.put("name", w.name);
+            weaponList.add(weaponData);
+        }
+
         state.put("type", "STATE");
         state.put("players", playerList);
         state.put("weapons", gameState.weaponsOnGround.size());
+        state.put("weaponPositions", weaponList);
         return gson.toJson(state);
     }
 }

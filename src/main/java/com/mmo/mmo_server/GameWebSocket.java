@@ -37,17 +37,25 @@ public class GameWebSocket extends TextWebSocketHandler {
 
             switch (type) {
                 case "JOIN" -> {
-                    // create new GamePlayer and add to gameState
                     String username = (String) data.get("username"); // ← read here
                     if (username == null) {
                         session.sendMessage(new TextMessage("Username required!"));
+                        return;
+                    }
+                    if (gameState.getPlayer(username) != null) {
+                        session.sendMessage(new TextMessage(
+                                gson.toJson(Map.of("type", "ERROR", "message", "Username already taken!"))
+                        ));
+                        session.close();
                         return;
                     }
                     int x = (int) (Math.random() * gameState.gridSize);
                     int y = (int) (Math.random() * gameState.gridSize);
                     GamePlayer player = new GamePlayer(username, 0, x, y, session);
                     gameState.addPlayer(player);
-                    gameService.spawnWeapons();
+                    if (gameState.getAllPlayers().size() == 1) {
+                        gameService.spawnWeapons();
+                    }
                     session.sendMessage(new TextMessage("Joined at " + x + "," + y));
                 }
                 case "MOVE" -> {
