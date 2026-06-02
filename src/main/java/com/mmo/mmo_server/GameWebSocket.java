@@ -37,7 +37,7 @@ public class GameWebSocket extends TextWebSocketHandler {
 
             switch (type) {
                 case "JOIN" -> {
-                    String username = (String) data.get("username"); // ← read here
+                    String username = (String) data.get("username");
                     if (username == null) {
                         session.sendMessage(new TextMessage("Username required!"));
                         return;
