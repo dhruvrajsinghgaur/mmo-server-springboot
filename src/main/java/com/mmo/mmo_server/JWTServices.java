@@ -7,13 +7,16 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
+
 @Service
 public class JWTServices {
-    private static final String SECRET = "qwertyuiiiioasdfghjkzxcvbnmqwertyusdf";
+    @Value("${jwt.secret}")
+    private String secret;
     private static final long EXPIRY = 1000 * 60 * 60 * 24;
 
     private SecretKey getKey(){
-        return Keys.hmacShaKeyFor(SECRET.getBytes());
+        return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
     public String generateToken(String username) {
