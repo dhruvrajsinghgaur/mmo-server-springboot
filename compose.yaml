@@ -1,0 +1,38 @@
+services:
+  # 1. Your MMO Java Server Container
+  mmo-server:
+    build: .
+    ports:
+      - "8080:8080"
+    networks:
+      - mmo-game-network
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/mmo
+
+  # 2. Your MySQL Database Container
+  mysql-db:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: mmo
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - mmo-game-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 5
+
+volumes:
+  mysql_data:
+
+networks:
+  mmo-game-network:
+    driver: bridge
+
