@@ -78,7 +78,7 @@
   <h1>⚔ Battle Arena</h1>
   <p>Last player standing wins</p>
   <input id="username-input" type="text" placeholder="Enter username" maxlength="16" />
-  <input id="server-input" type="text" placeholder="Server (localhost:8080)" value="localhost:8080" />
+  <input id="server-input" type="text" placeholder="Railway Server" value="mmo-server-springboot-production.up.railway.app" />
   <button onclick="joinGame()">ENTER ARENA</button>
   <p style="font-size:11px; color:#555;">WASD to move &nbsp;|&nbsp; SPACE to attack in last direction</p>
 </div>
@@ -177,38 +177,54 @@ function joinGame() {
 }
 
 function connect(server, username) {
-  ws = new WebSocket('ws://' + server + '/game');
+  const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+
+  ws = new WebSocket(protocol + server + '/game');
 
   ws.onopen = () => {
     setStatus(true, 'Connected');
-    ws.send(JSON.stringify({ type: 'JOIN', username }));
+    ws.send(JSON.stringify({
+      type: 'JOIN',
+      username: username
+    }));
     addLog('Entered the arena', 'log-join');
   };
 
   ws.onmessage = (e) => {
     try {
       const data = JSON.parse(e.data);
+
       if (data.type === 'STATE') {
         lastState = data;
         tickCount++;
         render(data);
         updateHUD(data);
-      } else if (data.type === 'WINNER') {
-        showWinner(data.winner);
-      } else if (data.type === 'PICKUP') {
-      document.getElementById('s-weapon').textContent = data.weapon + ' (ATK:' + data.atk + ')';
-      addLog('Picked up ' + data.weapon, 'log-pickup');
-    }else if (data.type === 'ERROR') {
-        alert(data.message);
-        location.reload();
       }
+      else if (data.type === 'WINNER') {
+        showWinner(data.winner);
+      }
+      else if (data.type === 'PICKUP') {
+        document.getElementById('s-weapon').textContent =
+          data.weapon + ' (ATK:' + data.atk + ')';
+        addLog('Picked up ' + data.weapon, 'log-pickup');
+      }
+      else if (data.type === 'ERROR') {
+        alert(data.message);
+      }
+
     } catch (err) {
-      console.log('msg:', e.data);
+      console.error(err);
     }
   };
 
-  ws.onclose = () => setStatus(false, 'Disconnected');
-  ws.onerror = () => setStatus(false, 'Connection error');
+  ws.onclose = () => {
+    setStatus(false, 'Disconnected');
+  };
+
+  ws.onerror = (err) => {
+    console.error(err);
+    setStatus(false, 'Connection error');
+  };
 }
 
 function render(state) {
