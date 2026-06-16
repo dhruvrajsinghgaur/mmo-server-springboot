@@ -2,7 +2,7 @@
 
 A production-grade real-time multiplayer game server built from scratch with Spring Boot, WebSocket, MySQL, and JWT authentication. Players connect, fight each other on a 100x100 grid, pick up weapons, and compete to be the last one standing.
 
-**🎮 Live demo:** [mmo-server-springboot-production.up.railway.app](https://mmo-server-springboot-production.up.railway.app) — containerized with Docker and deployed on Railway. Click the link, enter a username, and play directly in your browser.
+**🎮 Live demo:** [mmo-server-springboot-production.up.railway.app](https://mmo-server-springboot-production.up.railway.app) — containerized with Docker and deployed on Railway. Click the link, enter a username, and play directly in your browser or open game.html in any browser.
 
 ---
 
