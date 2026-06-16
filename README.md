@@ -2,7 +2,7 @@
 
 A production-grade real-time multiplayer game server built from scratch with Spring Boot, WebSocket, MySQL, and JWT authentication. Players connect, fight each other on a 100x100 grid, pick up weapons, and compete to be the last one standing.
 
-**🎮 Live demo:** [mmo-server-springboot-production.up.railway.app](https://mmo-server-springboot-production.up.railway.app) — containerized with Docker and deployed on Railway. Open `game.html` in a browser (server field is pre-filled) to join.
+**🎮 Live demo:** [mmo-server-springboot-production.up.railway.app](https://mmo-server-springboot-production.up.railway.app) — containerized with Docker and deployed on Railway. Click the link, enter a username, and play directly in your browser.
 
 ---
 
@@ -239,7 +239,7 @@ The deployment has been validated with a real multiplayer session: two players c
 
 ## Quick Test
 
-Open `game.html` in a browser — the server field is pre-filled with the live Railway URL, so you can enter a username and click **Enter Arena** to join immediately. To test against a local instance instead, change the field to `localhost:8080`. Open two tabs (or share the link with a friend) with different usernames to fight.
+Click the live demo link above — it now serves the game directly, with the server field auto-filled to match wherever the page is hosted, so no manual setup is needed. To test a local instance instead, run the server (see below) and visit `http://localhost:8080`. Open two tabs (or share the link with a friend) with different usernames to fight.
 
 ---
 

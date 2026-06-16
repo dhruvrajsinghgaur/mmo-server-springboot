@@ -1,76 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MMO Battle Arena</title>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #0a0a0f; color: #e0e0e0; font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MMO Battle Arena</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0a0f; color: #e0e0e0; font-family: 'Courier New', monospace; overflow: hidden; height: 100vh; display: flex; flex-direction: column; }
 
-  #login-screen {
-    position: fixed; inset: 0; background: #0a0a0f;
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 100;
-  }
-  #login-screen h1 { font-size: 36px; color: #4fc3f7; letter-spacing: 4px; text-transform: uppercase; }
-  #login-screen p { color: #888; font-size: 13px; }
-  #login-screen input {
-    background: #1a1a2e; border: 1px solid #4fc3f7; color: #e0e0e0;
-    padding: 10px 20px; font-size: 16px; font-family: monospace; width: 260px; border-radius: 4px; outline: none;
-  }
-  #login-screen button {
-    background: #4fc3f7; color: #0a0a0f; border: none; padding: 10px 40px;
-    font-size: 16px; font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px; letter-spacing: 2px;
-  }
-  #login-screen button:hover { background: #81d4fa; }
+    #login-screen {
+      position: fixed; inset: 0; background: #0a0a0f;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; z-index: 100;
+    }
+    #login-screen h1 { font-size: 36px; color: #4fc3f7; letter-spacing: 4px; text-transform: uppercase; }
+    #login-screen p { color: #888; font-size: 13px; }
+    #login-screen input {
+      background: #1a1a2e; border: 1px solid #4fc3f7; color: #e0e0e0;
+      padding: 10px 20px; font-size: 16px; font-family: monospace; width: 260px; border-radius: 4px; outline: none;
+    }
+    #login-screen button {
+      background: #4fc3f7; color: #0a0a0f; border: none; padding: 10px 40px;
+      font-size: 16px; font-family: monospace; font-weight: bold; cursor: pointer; border-radius: 4px; letter-spacing: 2px;
+    }
+    #login-screen button:hover { background: #81d4fa; }
 
-  #game-screen { display: none; flex: 1; flex-direction: row; }
+    #game-screen { display: none; flex: 1; flex-direction: row; }
 
-  #canvas-wrap { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; background: #0d0d1a; }
-  canvas { border: 1px solid #1a2a4a; }
+    #canvas-wrap { flex: 1; position: relative; display: flex; align-items: center; justify-content: center; background: #0d0d1a; }
+    canvas { border: 1px solid #1a2a4a; }
 
-  #hud { width: 220px; background: #0f0f1e; border-left: 1px solid #1a2a4a; padding: 16px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+    #hud { width: 220px; background: #0f0f1e; border-left: 1px solid #1a2a4a; padding: 16px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
 
-  .hud-section { border: 1px solid #1a2a4a; border-radius: 4px; padding: 10px; }
-  .hud-title { font-size: 10px; color: #4fc3f7; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+    .hud-section { border: 1px solid #1a2a4a; border-radius: 4px; padding: 10px; }
+    .hud-title { font-size: 10px; color: #4fc3f7; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
 
-  #my-stats .stat-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
-  #my-stats .stat-label { color: #888; }
-  #my-stats .stat-val { color: #e0e0e0; }
+    #my-stats .stat-row { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; }
+    #my-stats .stat-label { color: #888; }
+    #my-stats .stat-val { color: #e0e0e0; }
 
-  .hp-bar-wrap { margin-top: 4px; }
-  .hp-bar-bg { background: #1a1a2e; height: 6px; border-radius: 3px; overflow: hidden; }
-  .hp-bar-fill { height: 100%; border-radius: 3px; transition: width 0.1s; }
+    .hp-bar-wrap { margin-top: 4px; }
+    .hp-bar-bg { background: #1a1a2e; height: 6px; border-radius: 3px; overflow: hidden; }
+    .hp-bar-fill { height: 100%; border-radius: 3px; transition: width 0.1s; }
 
-  #players-list .player-entry { font-size: 11px; padding: 4px 0; border-bottom: 1px solid #1a2a4a; }
-  #players-list .player-entry:last-child { border-bottom: none; }
-  #players-list .pname { color: #4fc3f7; }
-  #players-list .ppos { color: #888; font-size: 10px; }
-  #players-list .php { font-size: 10px; }
+    #players-list .player-entry { font-size: 11px; padding: 4px 0; border-bottom: 1px solid #1a2a4a; }
+    #players-list .player-entry:last-child { border-bottom: none; }
+    #players-list .pname { color: #4fc3f7; }
+    #players-list .ppos { color: #888; font-size: 10px; }
+    #players-list .php { font-size: 10px; }
 
-  #weapons-list .weapon-entry { font-size: 11px; color: #66bb6a; padding: 2px 0; }
+    #weapons-list .weapon-entry { font-size: 11px; color: #66bb6a; padding: 2px 0; }
 
-  #controls-help { font-size: 10px; color: #555; line-height: 1.8; }
-  #controls-help span { color: #888; }
+    #controls-help { font-size: 10px; color: #555; line-height: 1.8; }
+    #controls-help span { color: #888; }
 
-  #log { font-size: 10px; color: #666; line-height: 1.6; max-height: 100px; overflow-y: auto; }
-  #log .log-entry { border-bottom: 1px solid #1a2a4a; padding: 1px 0; }
-  #log .log-kill { color: #ef5350; }
-  #log .log-pickup { color: #66bb6a; }
-  #log .log-join { color: #4fc3f7; }
+    #log { font-size: 10px; color: #666; line-height: 1.6; max-height: 100px; overflow-y: auto; }
+    #log .log-entry { border-bottom: 1px solid #1a2a4a; padding: 1px 0; }
+    #log .log-kill { color: #ef5350; }
+    #log .log-pickup { color: #66bb6a; }
+    #log .log-join { color: #4fc3f7; }
 
-  #winner-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
-    align-items: center; justify-content: center; flex-direction: column; gap: 16px; z-index: 200;
-  }
-  #winner-overlay h2 { font-size: 48px; color: #ffd700; letter-spacing: 4px; }
-  #winner-overlay p { color: #888; font-size: 14px; }
-  #winner-overlay button { background: #4fc3f7; color: #0a0a0f; border: none; padding: 10px 30px; font-size: 14px; font-family: monospace; cursor: pointer; border-radius: 4px; }
+    #winner-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+      align-items: center; justify-content: center; flex-direction: column; gap: 16px; z-index: 200;
+    }
+    #winner-overlay h2 { font-size: 48px; color: #ffd700; letter-spacing: 4px; }
+    #winner-overlay p { color: #888; font-size: 14px; }
+    #winner-overlay button { background: #4fc3f7; color: #0a0a0f; border: none; padding: 10px 30px; font-size: 14px; font-family: monospace; cursor: pointer; border-radius: 4px; }
 
-  #status-bar { height: 24px; background: #0f0f1e; border-top: 1px solid #1a2a4a; display: flex; align-items: center; padding: 0 12px; font-size: 11px; color: #555; gap: 16px; }
-  #status-dot { width: 6px; height: 6px; border-radius: 50%; background: #ef5350; }
-  #status-dot.connected { background: #66bb6a; }
-</style>
+    #status-bar { height: 24px; background: #0f0f1e; border-top: 1px solid #1a2a4a; display: flex; align-items: center; padding: 0 12px; font-size: 11px; color: #555; gap: 16px; }
+    #status-dot { width: 6px; height: 6px; border-radius: 50%; background: #ef5350; }
+    #status-dot.connected { background: #66bb6a; }
+  </style>
 </head>
 <body>
 
@@ -78,7 +78,7 @@
   <h1>⚔ Battle Arena</h1>
   <p>Last player standing wins</p>
   <input id="username-input" type="text" placeholder="Enter username" maxlength="16" />
-  <input id="server-input" type="text" placeholder="Railway Server" value="mmo-server-springboot-production.up.railway.app" />
+  <input id="server-input" type="text" placeholder="Server address" value="" />
   <button onclick="joinGame()">ENTER ARENA</button>
   <p style="font-size:11px; color:#555;">WASD to move &nbsp;|&nbsp; SPACE to attack in last direction</p>
 </div>
@@ -138,243 +138,245 @@
 </div>
 
 <script>
-const GRID = 100;
-const TILE = 7;
-const CANVAS_SIZE = GRID * TILE;
+  document.getElementById('server-input').value = window.location.host;
 
-const canvas = document.getElementById('game-canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = CANVAS_SIZE;
-canvas.height = CANVAS_SIZE;
+  const GRID = 100;
+  const TILE = 7;
+  const CANVAS_SIZE = GRID * TILE;
 
-let ws = null;
-let myUsername = '';
-let facingDx = 1, facingDy = 0;
-let lastState = null;
-let tickCount = 0;
-let lastTickTime = Date.now();
+  const canvas = document.getElementById('game-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = CANVAS_SIZE;
+  canvas.height = CANVAS_SIZE;
 
-const COLORS = ['#4fc3f7','#ef5350','#66bb6a','#ffd54f','#ba68c8','#ff8a65','#4db6ac','#f06292'];
-const playerColors = {};
-let colorIdx = 0;
+  let ws = null;
+  let myUsername = '';
+  let facingDx = 1, facingDy = 0;
+  let lastState = null;
+  let tickCount = 0;
+  let lastTickTime = Date.now();
 
-function getColor(name) {
-  if (!playerColors[name]) playerColors[name] = COLORS[colorIdx++ % COLORS.length];
-  return playerColors[name];
-}
+  const COLORS = ['#4fc3f7','#ef5350','#66bb6a','#ffd54f','#ba68c8','#ff8a65','#4db6ac','#f06292'];
+  const playerColors = {};
+  let colorIdx = 0;
 
-function joinGame() {
-  const username = document.getElementById('username-input').value.trim();
-  const server = document.getElementById('server-input').value.trim();
-  if (!username) { alert('Enter a username!'); return; }
-  myUsername = username;
-
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('game-screen').style.display = 'flex';
-  document.getElementById('s-name').textContent = username;
-
-  connect(server, username);
-}
-
-function connect(server, username) {
-  const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-
-  ws = new WebSocket(protocol + server + '/game');
-
-  ws.onopen = () => {
-    setStatus(true, 'Connected');
-    ws.send(JSON.stringify({
-      type: 'JOIN',
-      username: username
-    }));
-    addLog('Entered the arena', 'log-join');
-  };
-
-  ws.onmessage = (e) => {
-    try {
-      const data = JSON.parse(e.data);
-
-      if (data.type === 'STATE') {
-        lastState = data;
-        tickCount++;
-        render(data);
-        updateHUD(data);
-      }
-      else if (data.type === 'WINNER') {
-        showWinner(data.winner);
-      }
-      else if (data.type === 'PICKUP') {
-        document.getElementById('s-weapon').textContent =
-          data.weapon + ' (ATK:' + data.atk + ')';
-        addLog('Picked up ' + data.weapon, 'log-pickup');
-      }
-      else if (data.type === 'ERROR') {
-        alert(data.message);
-      }
-
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  ws.onclose = () => {
-    setStatus(false, 'Disconnected');
-  };
-
-  ws.onerror = (err) => {
-    console.error(err);
-    setStatus(false, 'Connection error');
-  };
-}
-
-function render(state) {
-  ctx.fillStyle = '#0d0d1a';
-  ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
-
-  // grid lines
-  ctx.strokeStyle = '#131325';
-  ctx.lineWidth = 0.5;
-  for (let i = 0; i <= GRID; i++) {
-    ctx.beginPath(); ctx.moveTo(i * TILE, 0); ctx.lineTo(i * TILE, CANVAS_SIZE); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(0, i * TILE); ctx.lineTo(CANVAS_SIZE, i * TILE); ctx.stroke();
+  function getColor(name) {
+    if (!playerColors[name]) playerColors[name] = COLORS[colorIdx++ % COLORS.length];
+    return playerColors[name];
   }
 
-  // weapons
-  if (state.weaponPositions) {
-    state.weaponPositions.forEach(w => {
-      ctx.fillStyle = '#66bb6a';
-      ctx.fillRect(w.x * TILE + 1, w.y * TILE + 1, TILE - 2, TILE - 2);
-      ctx.fillStyle = '#0d1f0d';
-      ctx.font = '5px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('W', w.x * TILE + TILE / 2, w.y * TILE + TILE / 2 + 2);
+  function joinGame() {
+    const username = document.getElementById('username-input').value.trim();
+    const server = document.getElementById('server-input').value.trim();
+    if (!username) { alert('Enter a username!'); return; }
+    myUsername = username;
+
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('game-screen').style.display = 'flex';
+    document.getElementById('s-name').textContent = username;
+
+    connect(server, username);
+  }
+
+  function connect(server, username) {
+    const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+
+    ws = new WebSocket(protocol + server + '/game');
+
+    ws.onopen = () => {
+      setStatus(true, 'Connected');
+      ws.send(JSON.stringify({
+        type: 'JOIN',
+        username: username
+      }));
+      addLog('Entered the arena', 'log-join');
+    };
+
+    ws.onmessage = (e) => {
+      try {
+        const data = JSON.parse(e.data);
+
+        if (data.type === 'STATE') {
+          lastState = data;
+          tickCount++;
+          render(data);
+          updateHUD(data);
+        }
+        else if (data.type === 'WINNER') {
+          showWinner(data.winner);
+        }
+        else if (data.type === 'PICKUP') {
+          document.getElementById('s-weapon').textContent =
+                  data.weapon + ' (ATK:' + data.atk + ')';
+          addLog('Picked up ' + data.weapon, 'log-pickup');
+        }
+        else if (data.type === 'ERROR') {
+          alert(data.message);
+        }
+
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    ws.onclose = () => {
+      setStatus(false, 'Disconnected');
+    };
+
+    ws.onerror = (err) => {
+      console.error(err);
+      setStatus(false, 'Connection error');
+    };
+  }
+
+  function render(state) {
+    ctx.fillStyle = '#0d0d1a';
+    ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
+
+    // grid lines
+    ctx.strokeStyle = '#131325';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i <= GRID; i++) {
+      ctx.beginPath(); ctx.moveTo(i * TILE, 0); ctx.lineTo(i * TILE, CANVAS_SIZE); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, i * TILE); ctx.lineTo(CANVAS_SIZE, i * TILE); ctx.stroke();
+    }
+
+    // weapons
+    if (state.weaponPositions) {
+      state.weaponPositions.forEach(w => {
+        ctx.fillStyle = '#66bb6a';
+        ctx.fillRect(w.x * TILE + 1, w.y * TILE + 1, TILE - 2, TILE - 2);
+        ctx.fillStyle = '#0d1f0d';
+        ctx.font = '5px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('W', w.x * TILE + TILE / 2, w.y * TILE + TILE / 2 + 2);
+      });
+    }
+
+    // players
+    state.players.forEach(p => {
+      const isMe = p.username === myUsername;
+      const color = getColor(p.username);
+      const dead = p.hp <= 0;
+
+      const px = p.x * TILE;
+      const py = p.y * TILE;
+
+      if (dead) {
+        ctx.fillStyle = '#333';
+        ctx.fillRect(px + 1, py + 1, TILE - 2, TILE - 2);
+        return;
+      }
+
+      // glow for self
+      if (isMe) {
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 8;
+      }
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(px + TILE / 2, py + TILE / 2, TILE / 2 - 0.5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.shadowBlur = 0;
+
+      // hp bar
+      const hpPct = Math.max(0, p.hp / 100);
+      ctx.fillStyle = '#1a1a2e';
+      ctx.fillRect(px, py - 3, TILE, 2);
+      ctx.fillStyle = hpPct > 0.5 ? '#66bb6a' : hpPct > 0.25 ? '#ffd54f' : '#ef5350';
+      ctx.fillRect(px, py - 3, TILE * hpPct, 2);
+
+      // name label for self
+      if (isMe) {
+        ctx.fillStyle = color;
+        ctx.font = 'bold 6px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText(p.username.substring(0, 6), px + TILE / 2, py - 5);
+      }
     });
   }
 
-  // players
-  state.players.forEach(p => {
-    const isMe = p.username === myUsername;
-    const color = getColor(p.username);
-    const dead = p.hp <= 0;
-
-    const px = p.x * TILE;
-    const py = p.y * TILE;
-
-    if (dead) {
-      ctx.fillStyle = '#333';
-      ctx.fillRect(px + 1, py + 1, TILE - 2, TILE - 2);
-      return;
+  function updateHUD(state) {
+    const me = state.players.find(p => p.username === myUsername);
+    if (me) {
+      document.getElementById('s-pos').textContent = me.x + ',' + me.y;
+      document.getElementById('s-hp').textContent = me.hp + '/100';
+      const pct = Math.max(0, me.hp) + '%';
+      const bar = document.getElementById('s-hp-bar');
+      bar.style.width = pct;
+      bar.style.background = me.hp > 50 ? '#66bb6a' : me.hp > 25 ? '#ffd54f' : '#ef5350';
     }
 
-    // glow for self
-    if (isMe) {
-      ctx.shadowColor = color;
-      ctx.shadowBlur = 8;
-    }
-
-    ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(px + TILE / 2, py + TILE / 2, TILE / 2 - 0.5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 0;
-
-    // hp bar
-    const hpPct = Math.max(0, p.hp / 100);
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(px, py - 3, TILE, 2);
-    ctx.fillStyle = hpPct > 0.5 ? '#66bb6a' : hpPct > 0.25 ? '#ffd54f' : '#ef5350';
-    ctx.fillRect(px, py - 3, TILE * hpPct, 2);
-
-    // name label for self
-    if (isMe) {
-      ctx.fillStyle = color;
-      ctx.font = 'bold 6px monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText(p.username.substring(0, 6), px + TILE / 2, py - 5);
-    }
-  });
-}
-
-function updateHUD(state) {
-  const me = state.players.find(p => p.username === myUsername);
-  if (me) {
-    document.getElementById('s-pos').textContent = me.x + ',' + me.y;
-    document.getElementById('s-hp').textContent = me.hp + '/100';
-    const pct = Math.max(0, me.hp) + '%';
-    const bar = document.getElementById('s-hp-bar');
-    bar.style.width = pct;
-    bar.style.background = me.hp > 50 ? '#66bb6a' : me.hp > 25 ? '#ffd54f' : '#ef5350';
-  }
-
-  document.getElementById('player-count').textContent = state.players.length;
-  const list = document.getElementById('players-list');
-  list.innerHTML = state.players.map(p => {
-    const hpColor = p.hp > 50 ? '#66bb6a' : p.hp > 25 ? '#ffd54f' : '#ef5350';
-    const isMe = p.username === myUsername ? ' (you)' : '';
-    return `<div class="player-entry">
+    document.getElementById('player-count').textContent = state.players.length;
+    const list = document.getElementById('players-list');
+    list.innerHTML = state.players.map(p => {
+      const hpColor = p.hp > 50 ? '#66bb6a' : p.hp > 25 ? '#ffd54f' : '#ef5350';
+      const isMe = p.username === myUsername ? ' (you)' : '';
+      return `<div class="player-entry">
       <span class="pname" style="color:${getColor(p.username)}">${p.username}${isMe}</span>
       <span class="php" style="color:${hpColor}"> ${p.hp}hp</span>
       <div class="ppos">${p.x},${p.y} — ${p.action}</div>
     </div>`;
-  }).join('');
+    }).join('');
 
-  document.getElementById('weapon-count').textContent = state.weapons;
+    document.getElementById('weapon-count').textContent = state.weapons;
 
-  const now = Date.now();
-  const tps = Math.round(tickCount / ((now - lastTickTime) / 1000 + 0.001));
-  if (tickCount % 20 === 0) {
-    document.getElementById('tick-info').textContent = tps + ' tps';
-    tickCount = 0;
-    lastTickTime = now;
+    const now = Date.now();
+    const tps = Math.round(tickCount / ((now - lastTickTime) / 1000 + 0.001));
+    if (tickCount % 20 === 0) {
+      document.getElementById('tick-info').textContent = tps + ' tps';
+      tickCount = 0;
+      lastTickTime = now;
+    }
   }
-}
 
-function addLog(msg, cls) {
-  const log = document.getElementById('log');
-  const div = document.createElement('div');
-  div.className = 'log-entry ' + (cls || '');
-  div.textContent = msg;
-  log.insertBefore(div, log.firstChild);
-  if (log.children.length > 20) log.removeChild(log.lastChild);
-}
-
-function showWinner(winner) {
-  const overlay = document.getElementById('winner-overlay');
-  document.getElementById('winner-text').textContent = winner === myUsername ? '🏆 YOU WIN!' : winner + ' WINS!';
-  overlay.style.display = 'flex';
-  addLog(winner + ' won the game!', 'log-kill');
-}
-
-function setStatus(connected, text) {
-  document.getElementById('status-dot').className = connected ? 'connected' : '';
-  document.getElementById('status-text').textContent = text;
-}
-
-function send(obj) {
-  if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj));
-}
-
-document.addEventListener('keydown', e => {
-  if (!myUsername) return;
-  let dx = 0, dy = 0;
-  if (e.key === 'w' || e.key === 'ArrowUp')    { dx = 0;  dy = -1; }
-  if (e.key === 's' || e.key === 'ArrowDown')   { dx = 0;  dy = 1;  }
-  if (e.key === 'a' || e.key === 'ArrowLeft')   { dx = -1; dy = 0;  }
-  if (e.key === 'd' || e.key === 'ArrowRight')  { dx = 1;  dy = 0;  }
-  if (dx !== 0 || dy !== 0) {
-    facingDx = dx; facingDy = dy;
-    send({ type: 'MOVE', username: myUsername, dx, dy });
-    e.preventDefault();
+  function addLog(msg, cls) {
+    const log = document.getElementById('log');
+    const div = document.createElement('div');
+    div.className = 'log-entry ' + (cls || '');
+    div.textContent = msg;
+    log.insertBefore(div, log.firstChild);
+    if (log.children.length > 20) log.removeChild(log.lastChild);
   }
-  if (e.key === ' ') {
-    send({ type: 'ATTACK', username: myUsername, dx: facingDx, dy: facingDy });
-    e.preventDefault();
-  }
-});
 
-document.getElementById('username-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') joinGame();
-});
+  function showWinner(winner) {
+    const overlay = document.getElementById('winner-overlay');
+    document.getElementById('winner-text').textContent = winner === myUsername ? '🏆 YOU WIN!' : winner + ' WINS!';
+    overlay.style.display = 'flex';
+    addLog(winner + ' won the game!', 'log-kill');
+  }
+
+  function setStatus(connected, text) {
+    document.getElementById('status-dot').className = connected ? 'connected' : '';
+    document.getElementById('status-text').textContent = text;
+  }
+
+  function send(obj) {
+    if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(obj));
+  }
+
+  document.addEventListener('keydown', e => {
+    if (!myUsername) return;
+    let dx = 0, dy = 0;
+    if (e.key === 'w' || e.key === 'ArrowUp')    { dx = 0;  dy = -1; }
+    if (e.key === 's' || e.key === 'ArrowDown')   { dx = 0;  dy = 1;  }
+    if (e.key === 'a' || e.key === 'ArrowLeft')   { dx = -1; dy = 0;  }
+    if (e.key === 'd' || e.key === 'ArrowRight')  { dx = 1;  dy = 0;  }
+    if (dx !== 0 || dy !== 0) {
+      facingDx = dx; facingDy = dy;
+      send({ type: 'MOVE', username: myUsername, dx, dy });
+      e.preventDefault();
+    }
+    if (e.key === ' ') {
+      send({ type: 'ATTACK', username: myUsername, dx: facingDx, dy: facingDy });
+      e.preventDefault();
+    }
+  });
+
+  document.getElementById('username-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') joinGame();
+  });
 </script>
 </body>
 </html>
